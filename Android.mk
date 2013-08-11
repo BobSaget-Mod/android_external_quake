@@ -31,7 +31,10 @@ include $(CLEAR_VARS)
 # Optional tag would mean it doesn't get installed by default
 LOCAL_MODULE_TAGS := optional
 
-LOCAL_CFLAGS := -Werror $(call cc-option,-Wno-error=unused-parameter) -fno-aggressive-loop-optimizations
+LOCAL_CFLAGS := -Werror -Wno-error=unused-parameter 
+ifneq ($(filter 4.8 4.9 4.8.% 4.9.%, $(shell $(TARGET_CC) --version)),)
+LOCAL_CFLAGS += -fno-aggressive-loop-optimizations
+endif
 
 LOCAL_SRC_FILES:= \
   cd_null.cpp \
@@ -95,6 +98,7 @@ LOCAL_C_INCLUDES:= \
 
 LOCAL_SHARED_LIBRARIES := \
 	libutils \
+	liblog \
 	libEGL \
 	libGLESv1_CM \
 	libOpenSLES
